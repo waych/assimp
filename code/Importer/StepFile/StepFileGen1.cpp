@@ -1310,7 +1310,7 @@ void StepFile::GetSchema(EXPRESS::ConversionSchema& out)
 
 namespace STEP {
 
-    // -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------
 template <> size_t GenericFill<NotImplemented>(const STEP::DB& db, const LIST& params, NotImplemented* in)
 {
 	return 0;

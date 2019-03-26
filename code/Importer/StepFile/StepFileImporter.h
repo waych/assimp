@@ -48,6 +48,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/BaseImporter.h>
 
 namespace Assimp {
+
+    namespace STEP {
+        class DB;
+    }
+
 namespace StepFile {
 
 class StepFileImporter : public BaseImporter {
@@ -59,6 +64,7 @@ public:
 
 protected:
     void InternReadFile( const std::string& pFile, aiScene* pScene, IOSystem* pIOHandler ) override;
+    void ProcessSpatialStructures( STEP::DB *db );
 
 private:
 };

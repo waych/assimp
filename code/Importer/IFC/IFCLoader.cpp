@@ -65,7 +65,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assimp/Importer.hpp>
 #include <assimp/importerdesc.h>
 
-
 namespace Assimp {
     template<> const char* LogFunctions<IFCImporter>::Prefix()
     {
@@ -120,13 +119,14 @@ static const aiImporterDesc desc = {
 
 // ------------------------------------------------------------------------------------------------
 // Constructor to be privately used by Importer
-IFCImporter::IFCImporter()
-{}
+IFCImporter::IFCImporter() {
+    // empty
+}
 
 // ------------------------------------------------------------------------------------------------
 // Destructor, private as well
-IFCImporter::~IFCImporter()
-{
+IFCImporter::~IFCImporter() {
+    // empty
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -164,7 +164,6 @@ void IFCImporter::SetupProperties(const Importer* pImp)
 	settings.cylindricalTessellation = std::min(std::max(pImp->GetPropertyInteger(AI_CONFIG_IMPORT_IFC_CYLINDRICAL_TESSELLATION, AI_IMPORT_IFC_DEFAULT_CYLINDRICAL_TESSELLATION), 3), 180);
 	settings.skipAnnotations = true;
 }
-
 
 // ------------------------------------------------------------------------------------------------
 // Imports the given file into the given scene structure.
@@ -388,7 +387,6 @@ void SetUnits(ConversionData& conv)
         ConvertUnit(*conv.proj.UnitsInContext->Units[i],conv);
     }
 }
-
 
 // ------------------------------------------------------------------------------------------------
 void SetCoordinateSpace(ConversionData& conv)

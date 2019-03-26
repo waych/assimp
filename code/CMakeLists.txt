@@ -802,6 +802,7 @@ ADD_ASSIMP_IMPORTER( MMD
 
 ADD_ASSIMP_IMPORTER( STEP
     STEPFile.h
+    Importer/StepFile/StepHelperTypes.h
     Importer/StepFile/StepFileImporter.h
     Importer/StepFile/StepFileImporter.cpp
     Importer/StepFile/StepFileGen1.cpp

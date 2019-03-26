@@ -58,15 +58,14 @@ struct aiNode;
 namespace Assimp {
 namespace IFC {
 
-    typedef double IfcFloat;
+typedef double IfcFloat;
 
-    // IfcFloat-precision math data types
-    typedef aiVector2t<IfcFloat> IfcVector2;
-    typedef aiVector3t<IfcFloat> IfcVector3;
-    typedef aiMatrix4x4t<IfcFloat> IfcMatrix4;
-    typedef aiMatrix3x3t<IfcFloat> IfcMatrix3;
-    typedef aiColor4t<IfcFloat> IfcColor4;
-
+// IfcFloat-precision math data types
+typedef aiVector2t<IfcFloat> IfcVector2;
+typedef aiVector3t<IfcFloat> IfcVector3;
+typedef aiMatrix4x4t<IfcFloat> IfcMatrix4;
+typedef aiMatrix3x3t<IfcFloat> IfcMatrix3;
+typedef aiColor4t<IfcFloat> IfcColor4;
 
 // ------------------------------------------------------------------------------------------------
 // Helper for std::for_each to delete all heap-allocated items in a container
@@ -77,8 +76,6 @@ struct delete_fun {
         delete del;
     }
 };
-
-
 
 // ------------------------------------------------------------------------------------------------
 // Helper used during mesh construction. Aids at creating aiMesh'es out of relatively few polygons.
@@ -129,10 +126,10 @@ struct TempOpening
 
     // ------------------------------------------------------------------------------
     TempOpening()
-        : solid()
-        , extrusionDir()
-        , profileMesh()
-    {
+    : solid()
+    , extrusionDir()
+    , profileMesh() {
+        // empty
     }
 
     // ------------------------------------------------------------------------------
@@ -148,8 +145,6 @@ struct TempOpening
 
     // ------------------------------------------------------------------------------
     void Transform(const IfcMatrix4& mat); // defined later since TempMesh is not complete yet
-
-
 
     // ------------------------------------------------------------------------------
     // Helper to sort openings by distance from a given base point
@@ -383,7 +378,6 @@ protected:
     ConversionData& conv;
 };
 
-
 // --------------------------------------------------------------------------------
 // A BoundedCurve always holds the invariant that GetParametricRange()
 // never returns infinite values.
@@ -391,22 +385,21 @@ protected:
 class BoundedCurve : public Curve {
 public:
     BoundedCurve(const Schema_2x3::IfcBoundedCurve& entity, ConversionData& conv)
-        : Curve(entity,conv)
-    {}
-
-public:
+    : Curve(entity,conv) {
+        // empty
+    }
 
     bool IsClosed() const;
 
-public:
-
     // sample the entire curve
     void SampleDiscrete(TempMesh& out) const;
+
     using Curve::SampleDiscrete;
 };
 
 // IfcProfile.cpp
 bool ProcessCurve(const Schema_2x3::IfcCurve& curve,  TempMesh& meshout, ConversionData& conv);
+
 }
 }
 

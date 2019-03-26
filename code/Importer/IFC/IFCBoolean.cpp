@@ -52,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <tuple>
 
 namespace Assimp {
-    namespace IFC {
+namespace IFC {
 
 // ------------------------------------------------------------------------------------------------
 // Calculates intersection between line segment and plane. To catch corner cases, specify which side you prefer.

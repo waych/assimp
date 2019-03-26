@@ -45,6 +45,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "StepFileImporter.h"
 #include "../../Importer/STEPParser/STEPFileReader.h"
+#include "StepReaderGen.h"
 #include <assimp/importerdesc.h>
 #include <assimp/DefaultIOSystem.h>
 
@@ -52,6 +53,14 @@ namespace Assimp {
 namespace StepFile {
 
 using namespace STEP;
+
+struct StepFileMesh {
+    std::vector<const ::Assimp::StepFile::cartesian_point*> mVertices;
+};
+
+struct StepFileData {
+    std::vector<StepFileMesh*> mMeshes;
+};
 
 static const aiImporterDesc desc = { "StepFile Importer",
                                 "",
@@ -90,8 +99,8 @@ const aiImporterDesc *StepFileImporter::GetInfo() const {
     return &desc;
 }
 
-static const std::string mode = "rb";
-static const std::string StepFileSchema = "CONFIG_CONTROL_DESIGN";
+static const char *mode = "rb";
+static const char *StepFileSchema = "CONFIG_CONTROL_DESIGN";
 
 void StepFileImporter::InternReadFile(const std::string &file, aiScene* pScene, IOSystem* pIOHandler) {
     // Read file into memory
@@ -104,6 +113,42 @@ void StepFileImporter::InternReadFile(const std::string &file, aiScene* pScene, 
     const STEP::HeaderInfo& head = static_cast<const STEP::DB&>(*db).GetHeader();
     if (!head.fileSchema.size() || head.fileSchema != StepFileSchema) {
         DeadlyImportError("Unrecognized file schema: " + head.fileSchema);
+    }
+    ::Assimp::STEP::EXPRESS::ConversionSchema schema;
+    ::Assimp::StepFile::GetSchema( schema );
+
+    static const char* const types_to_track[] = {
+        "cartesian_point",
+        "face_outer_bound",
+        "vertex_point",
+        "surface_of_linear_extrusion",
+        "plane",
+        "line",
+        "edge_loop"
+    };
+
+    // tell the reader for which types we need to simulate STEPs reverse indices
+    static const char* const inverse_indices_to_track[] = {
+        "product_definition"
+    };
+
+    STEP::ReadFile( *db, schema, types_to_track, inverse_indices_to_track );
+
+    ProcessSpatialStructures( db.get() );
+}
+
+void StepFileImporter::ProcessSpatialStructures( STEP::DB *db ) {
+    StepFileData *data = new StepFileData;
+
+    StepFileMesh *mesh = new StepFileMesh;
+    const STEP::DB::ObjectMapByType& map = db->GetObjectsByType();
+    const STEP::DB::ObjectSet *range = &map.find( "cartesian_point" )->second;
+    for (const STEP::LazyObject* lz : *range) {
+        const ::Assimp::StepFile::cartesian_point *cart_pt = lz->ToPtr<::Assimp::StepFile::cartesian_point>();
+        if (nullptr == cart_pt) {
+            continue;
+        }
+        mesh->mVertices.push_back( cart_pt );
     }
 }
 
