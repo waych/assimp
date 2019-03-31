@@ -42,8 +42,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  @brief Geometry conversion and synthesis for IFC
  */
 
-
-
 #ifndef ASSIMP_BUILD_NO_IFC_IMPORTER
 #include "IFCUtil.h"
 #include "code/PolyTools.h"
@@ -56,7 +54,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <iterator>
 
 namespace Assimp {
-    namespace IFC {
+namespace IFC {
 
 // ------------------------------------------------------------------------------------------------
 bool ProcessPolyloop(const Schema_2x3::IfcPolyLoop& loop, TempMesh& meshout, ConversionData& /*conv*/)

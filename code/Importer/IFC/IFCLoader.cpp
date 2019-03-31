@@ -925,7 +925,7 @@ void ProcessSpatialStructures(ConversionData& conv)
 				continue;
 			}
 
-			nodes.push_back(ProcessSpatialStructure(NULL, *prod, conv, NULL));
+			nodes.push_back(ProcessSpatialStructure( nullptr, *prod, conv, nullptr ));
 		}
 
 		nb_nodes = nodes.size();
@@ -936,7 +936,7 @@ void ProcessSpatialStructures(ConversionData& conv)
 	}
 	else if (nb_nodes > 1) {
 		conv.out->mRootNode = new aiNode("Root");
-		conv.out->mRootNode->mParent = NULL;
+		conv.out->mRootNode->mParent = nullptr;
 		conv.out->mRootNode->mNumChildren = static_cast<unsigned int>(nb_nodes);
 		conv.out->mRootNode->mChildren = new aiNode*[conv.out->mRootNode->mNumChildren];
 
@@ -976,7 +976,5 @@ void MakeTreeRelative(ConversionData& conv)
 }
 
 } // !anon
-
-
 
 #endif

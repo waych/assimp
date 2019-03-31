@@ -142,16 +142,25 @@ void StepFileImporter::ProcessSpatialStructures( STEP::DB *db ) {
 
     StepFileMesh *mesh = new StepFileMesh;
     const STEP::DB::ObjectMapByType& map = db->GetObjectsByType();
-    const STEP::DB::ObjectSet *range = &map.find( "cartesian_point" )->second;
-    for (const STEP::LazyObject* lz : *range) {
+
+    const STEP::DB::ObjectSet *cpRange = &map.find( "cartesian_point" )->second;
+    for (const STEP::LazyObject* lz : *cpRange) {
         const ::Assimp::StepFile::cartesian_point *cart_pt = lz->ToPtr<::Assimp::StepFile::cartesian_point>();
         if (nullptr == cart_pt) {
             continue;
         }
         mesh->mVertices.push_back( cart_pt );
     }
-}
 
+    const STEP::DB::ObjectSet *faceRange = &map.find( "face_outer_bound" )->second;
+    for (const STEP::LazyObject* lz : *faceRange) {
+        const ::Assimp::StepFile::face_outer_bound *face = lz->ToPtr<::Assimp::StepFile::face_outer_bound>();
+        if (nullptr == face) {
+            continue;
+        }
+        face->bound
+    }
+}
 } // Namespace StepFile
 } // Namespace Assimp
 
