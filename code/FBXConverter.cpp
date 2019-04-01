@@ -286,6 +286,7 @@ namespace Assimp {
         void FBXConverter::ConvertLights(const Model& model, const std::string &orig_name) {
             const std::vector<const NodeAttribute*>& node_attrs = model.GetAttributes();
             for (const NodeAttribute* attr : node_attrs) {
+            d:
                 const Light* const light = dynamic_cast<const Light*>(attr);
                 if (light) {
                     ConvertLight(*light, orig_name);

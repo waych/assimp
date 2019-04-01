@@ -64,29 +64,29 @@ void ProcessPolyLine(const Schema_2x3::IfcPolyline& def, TempMesh& meshout, Conv
 }
 
 // ------------------------------------------------------------------------------------------------
-bool ProcessCurve(const Schema_2x3::IfcCurve& curve,  TempMesh& meshout, ConversionData& conv)
-{
-    std::unique_ptr<const Curve> cv(Curve::Convert(curve,conv));
-    if (!cv) {
+bool ProcessCurve(const Schema_2x3::IfcCurve& curve,  TempMesh& meshout, ConversionData& conv) {
+    const Curve *cv( Curve::Convert( curve, conv ) );
+    if (nullptr == cv) {
         IFCImporter::LogWarn("skipping unknown IfcCurve entity, type is " + curve.GetClassName());
         return false;
     }
 
     // we must have a bounded curve at this point
-    if (const BoundedCurve* bc = dynamic_cast<const BoundedCurve*>(cv.get())) {
+    bool ok = false;
+    if (const BoundedCurve* bc = dynamic_cast<const BoundedCurve*>( cv ) ) {
         try {
             bc->SampleDiscrete(meshout);
-        }
-        catch(const  CurveError& cv) {
+        } catch(const  CurveError& cv) {
             IFCImporter::LogError(cv.mStr + " (error occurred while processing curve)");
             return false;
         }
         meshout.mVertcnt.push_back(static_cast<unsigned int>(meshout.mVerts.size()));
-        return true;
+        ok = true;
     }
 
     IFCImporter::LogError("cannot use unbounded curve as profile");
-    return false;
+
+    return ok;
 }
 
 // ------------------------------------------------------------------------------------------------

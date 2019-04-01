@@ -153,12 +153,26 @@ void StepFileImporter::ProcessSpatialStructures( STEP::DB *db ) {
     }
 
     const STEP::DB::ObjectSet *faceRange = &map.find( "face_outer_bound" )->second;
+    if (faceRange->size() > 0) {
+
+    }
     for (const STEP::LazyObject* lz : *faceRange) {
         const ::Assimp::StepFile::face_outer_bound *face = lz->ToPtr<::Assimp::StepFile::face_outer_bound>();
         if (nullptr == face) {
             continue;
         }
-        face->bound
+
+        // todo!
+        //face->bound->
+    }
+
+    const STEP::DB::ObjectSet *edgeCurve = &map.find( "edge_curve" )->second;
+    for (const STEP::LazyObject* lz : *faceRange) {
+        const ::Assimp::StepFile::edge_curve *curEdgeCurve = lz->ToPtr<::Assimp::StepFile::edge_curve>();
+        if (nullptr == curEdgeCurve) {
+            continue;
+        }
+        curEdgeCurve->edge_geometry
     }
 }
 } // Namespace StepFile

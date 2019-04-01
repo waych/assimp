@@ -549,7 +549,6 @@ namespace STEP {
             // empty
         }
 
-
         void flag_invalid() {
             have = false;
         }
@@ -557,7 +556,6 @@ namespace STEP {
         void flag_valid() {
             have = true;
         }
-
 
         bool operator! () const {
             return !have;

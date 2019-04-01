@@ -49,9 +49,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Assimp {
 
-    namespace STEP {
-        class DB;
-    }
+namespace STEP {
+    class DB;
+}
 
 namespace StepFile {
 
