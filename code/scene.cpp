@@ -44,34 +44,34 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 aiNode::aiNode()
 : mName("")
-, mParent(NULL)
+, mParent(nullptr)
 , mNumChildren(0)
-, mChildren(NULL)
+, mChildren(nullptr)
 , mNumMeshes(0)
-, mMeshes(NULL)
-, mMetaData(NULL) {
+, mMeshes(nullptr)
+, mEnabled( true )
+, mMetaData(nullptr) {
     // empty
 }
 
 aiNode::aiNode(const std::string& name)
 : mName(name)
-, mParent(NULL)
+, mParent(nullptr)
 , mNumChildren(0)
-, mChildren(NULL)
+, mChildren(nullptr)
 , mNumMeshes(0)
-, mMeshes(NULL)
-, mMetaData(NULL) {
+, mMeshes(nullptr)
+, mMetaData(nullptr) {
     // empty
 }
 
-/** Destructor */
 aiNode::~aiNode() {
     // delete all children recursively
     // to make sure we won't crash if the data is invalid ...
-    if (mChildren && mNumChildren)
-    {
-        for (unsigned int a = 0; a < mNumChildren; a++)
-            delete mChildren[a];
+    if (mChildren && mNumChildren) {
+        for (unsigned int a = 0; a < mNumChildren; ++a) {
+            delete mChildren[ a ];
+        }
     }
     delete[] mChildren;
     delete[] mMeshes;
@@ -96,9 +96,10 @@ const aiNode *aiNode::FindNode(const char* name) const {
 }
 
 aiNode *aiNode::FindNode(const char* name) {
-    if (!::strcmp(mName.data, name))return this;
-    for (unsigned int i = 0; i < mNumChildren; ++i)
-    {
+    if (0 == ::strcmp(mName.data, name)) {
+        return this;
+    }
+    for (unsigned int i = 0; i < mNumChildren; ++i) {
         aiNode* const p = mChildren[i]->FindNode(name);
         if (p) {
             return p;
@@ -129,8 +130,7 @@ void aiNode::addChildren(unsigned int numChildren, aiNode **children) {
         ::memcpy(&mChildren[mNumChildren], children, sizeof(aiNode*)* numChildren);
         mNumChildren += numChildren;
         delete[] tmp;
-    }
-    else {
+    } else {
         mChildren = new aiNode*[numChildren];
         for (unsigned int i = 0; i < numChildren; i++) {
             mChildren[i] = children[i];

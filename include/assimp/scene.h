@@ -76,8 +76,7 @@ extern "C" {
  * the imported scene does consist of only a single root node without children.
  */
 // -------------------------------------------------------------------------------
-struct ASSIMP_API aiNode
-{
+struct ASSIMP_API aiNode {
     /** The name of the node.
      *
      * The name might be empty (length of zero) but all nodes which
@@ -121,6 +120,11 @@ struct ASSIMP_API aiNode
       * mesh list of the #aiScene.
       */
     unsigned int* mMeshes;
+
+    /** Metadata to enable or disable this node instance in the scene hierarchy.
+     *  When disabling this node instance all children will be disabled as well.
+     */
+    bool mEnabled;
 
     /** Metadata associated with this node or NULL if there is no metadata.
       *  Whether any metadata is generated depends on the source file format. See the

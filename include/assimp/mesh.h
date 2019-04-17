@@ -788,15 +788,17 @@ struct aiMesh
         { return mFaces != nullptr && mNumFaces > 0; }
 
     //! Check whether the mesh contains normal vectors
-    bool HasNormals() const
-        { return mNormals != nullptr && mNumVertices > 0; }
+    bool HasNormals() const {
+        return mNormals != nullptr && mNumVertices > 0;
+    }
 
     //! Check whether the mesh contains tangent and bitangent vectors
     //! It is not possible that it contains tangents and no bitangents
     //! (or the other way round). The existence of one of them
     //! implies that the second is there, too.
-    bool HasTangentsAndBitangents() const
-        { return mTangents != nullptr && mBitangents != nullptr && mNumVertices > 0; }
+    bool HasTangentsAndBitangents() const {
+        return mTangents != nullptr && mBitangents != nullptr && mNumVertices > 0;
+    }
 
     //! Check whether the mesh contains a vertex color set
     //! \param pIndex Index of the vertex color set
@@ -848,5 +850,5 @@ struct aiMesh
 #ifdef __cplusplus
 }
 #endif //! extern "C"
-#endif // AI_MESH_H_INC
 
+#endif // AI_MESH_H_INC
