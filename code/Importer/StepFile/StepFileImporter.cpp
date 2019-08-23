@@ -172,7 +172,7 @@ void StepFileImporter::ProcessSpatialStructures( STEP::DB *db ) {
         if (nullptr == curEdgeCurve) {
             continue;
         }
-        curEdgeCurve->edge_geometry
+        //curEdgeCurve->edge_geometry
     }
 }
 } // Namespace StepFile
