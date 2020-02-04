@@ -55,10 +55,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "3MFXmlTags.h"
 #include "D3MFOpcPackage.h"
 
+
 #ifdef ASSIMP_USE_HUNTER
-#  include <zip/zip.h>
+#   include <unzip/unzip.h>
 #else
-#  include <contrib/zip/src/zip.h>
+#   include <contrib/unzip/unzip.h>
 #endif
 
 namespace Assimp {
@@ -117,7 +118,8 @@ bool D3MFExporter::validate() {
 bool D3MFExporter::exportArchive( const char *file ) {
     bool ok( true );
 
-    m_zipArchive = zip_open( file, ZIP_DEFAULT_COMPRESSION_LEVEL, 'w' );
+    m_zipArchive = unzOpen(file);
+    //m_zipArchive = zip_open( file, ZIP_DEFAULT_COMPRESSION_LEVEL, 'w' );
     if ( nullptr == m_zipArchive ) {
         return false;
     }
@@ -126,7 +128,10 @@ bool D3MFExporter::exportArchive( const char *file ) {
     ok |= export3DModel();
     ok |= exportRelations();
 
-    zip_close( m_zipArchive );
+    if (0 != unzClose(m_zipArchive)) {
+		ok = false;
+    }
+    //zip_close( m_zipArchive );
     m_zipArchive = nullptr;
 
     return ok;

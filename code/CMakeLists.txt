@@ -952,27 +952,6 @@ ELSE(HUNTER_ENABLED)
   SOURCE_GROUP(Contrib\\unzip FILES ${unzip_SRCS})
 ENDIF(HUNTER_ENABLED)
 
-# zip (https://github.com/kuba--/zip)
-IF(HUNTER_ENABLED)
-  hunter_add_package(zip)
-  find_package(zip CONFIG REQUIRED)
-ELSE(HUNTER_ENABLED)
-  SET( ziplib_SRCS
-    ../contrib/zip/src/miniz.h
-    ../contrib/zip/src/zip.c
-    ../contrib/zip/src/zip.h
-  )
-
-  # TODO if cmake required version has been updated to >3.12.0, collapse this to the second case only
-  if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
-  	add_definitions(-DMINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
-  else()
-  	add_compile_definitions(MINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
-  endif()
-
-  SOURCE_GROUP( ziplib FILES ${ziplib_SRCS} )
-ENDIF(HUNTER_ENABLED)
-
 # openddlparser
 IF(HUNTER_ENABLED)
   hunter_add_package(openddlparser)

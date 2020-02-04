@@ -89,7 +89,8 @@ protected:
 
 private:
     std::string mArchiveName;
-    zip_t *m_zipArchive;
+	unzFile m_zipArchive;
+	//zip_t *m_zipArchive;
     const aiScene *mScene;
     std::ostringstream mModelOutput;
     std::ostringstream mRelOutput;
