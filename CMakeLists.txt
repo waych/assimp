@@ -136,8 +136,8 @@ OPTION ( ASSIMP_IGNORE_GIT_HASH
 )
 
 IF ( WIN32 )
-    OPTION ( ASSIMP_BUILD_ASSIMP_VIEW 
-      "If the Assimp view tool is built. (requires DirectX)" 
+    OPTION ( ASSIMP_BUILD_ASSIMP_VIEW
+      "If the Assimp view tool is built. (requires DirectX)"
       OFF )
 ENDIF()
 
@@ -267,6 +267,8 @@ ELSEIF(MSVC)
   IF(MSVC12)
     ADD_COMPILE_OPTIONS(/wd4351)
   ENDIF()
+  # Add exceptions which don't seem to be present by default:
+  ADD_COMPILE_OPTIONS(/EHsc)
   SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D_DEBUG /Zi /Od")
 ELSEIF ( "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" )
   IF(NOT ASSIMP_HUNTER_ENABLED)
