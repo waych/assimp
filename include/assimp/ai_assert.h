@@ -44,6 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <assimp/defs.h>
 
+#if __cplusplus
 #if defined(ASSIMP_BUILD_DEBUG)
 
 namespace Assimp
@@ -57,8 +58,9 @@ namespace Assimp
 
 #else
 #   define  ai_assert(expression)
-#   define  ai_assert_entry() 
+#   define  ai_assert_entry()
 #endif // ASSIMP_BUILD_DEBUG
+#endif
 
 #endif // AI_ASSERT_H_INC
 
