@@ -80,7 +80,7 @@ extern "C" {
  *  @endcode
  *  where 'diffContrib' is the intensity of the incoming light for that pixel.
  */
-enum aiTextureOp
+enum aiTextureOp: unsigned
 {
     /** T = T1 * T2 */
     aiTextureOp_Multiply = 0x0,
@@ -111,7 +111,7 @@ enum aiTextureOp
  *
  *  Commonly referred to as 'wrapping mode'.
  */
-enum aiTextureMapMode
+enum aiTextureMapMode: unsigned
 {
     /** A texture coordinate u|v is translated to u%1|v%1
      */
@@ -146,7 +146,7 @@ enum aiTextureMapMode
  *  how the mapping should look like (e.g spherical) is given.
  *  See the #AI_MATKEY_MAPPING property for more details.
  */
-enum aiTextureMapping
+enum aiTextureMapping: unsigned
 {
     /** The mapping coordinates are taken from an UV channel.
      *
@@ -192,7 +192,7 @@ enum aiTextureMapping
  *  and the artists working on models have to conform to this specification,
  *  regardless which 3D tool they're using.
  */
-enum aiTextureType
+enum aiTextureType: unsigned
 {
     /** Dummy value.
      *
@@ -202,8 +202,8 @@ enum aiTextureType
      */
     aiTextureType_NONE = 0,
 
-    /** LEGACY API MATERIALS 
-     * Legacy refers to materials which 
+    /** LEGACY API MATERIALS
+     * Legacy refers to materials which
      * Were originally implemented in the specifications around 2000.
      * These must never be removed, as most engines support them.
      */
@@ -328,7 +328,7 @@ ASSIMP_API const char* TextureTypeToString(enum aiTextureType in);
  *  most common implementation matches the original rendering results of the
  *  3D modeller which wrote a particular model as closely as possible.
  */
-enum aiShadingMode
+enum aiShadingMode: unsigned
 {
     /** Flat shading. Shading is done on per-face base,
      *  diffuse only. Also known as 'faceted shading'.
@@ -399,7 +399,7 @@ enum aiShadingMode
  *
  *  This corresponds to the #AI_MATKEY_TEXFLAGS property.
 */
-enum aiTextureFlags
+enum aiTextureFlags: unsigned
 {
     /** The texture's color values have to be inverted (component-wise 1-n)
      */
@@ -445,7 +445,7 @@ enum aiTextureFlags
  *  calculation.<br>
  *  This corresponds to the #AI_MATKEY_BLEND_FUNC property.
 */
-enum aiBlendMode
+enum aiBlendMode: unsigned
 {
     /**
      *  Formula:
@@ -527,7 +527,7 @@ struct aiUVTransform
 /** @brief A very primitive RTTI system for the contents of material
  *  properties.
  */
-enum aiPropertyTypeInfo
+enum aiPropertyTypeInfo: unsigned
 {
     /** Array of single-precision (32 Bit) floats
      *

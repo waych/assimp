@@ -368,7 +368,7 @@ struct aiBone {
  *  @see aiProcess_Triangulate Automatic triangulation
  *  @see AI_CONFIG_PP_SBP_REMOVE Removal of specific primitive types.
  */
-enum aiPrimitiveType {
+enum aiPrimitiveType: unsigned {
     /** A point primitive.
      *
      * This is just a single vertex in the virtual world,
@@ -458,8 +458,8 @@ struct aiAnimMesh {
      */
     unsigned int mNumVertices;
 
-    /** 
-     * Weight of the AnimMesh. 
+    /**
+     * Weight of the AnimMesh.
      */
     float mWeight;
 
@@ -535,7 +535,7 @@ struct aiAnimMesh {
 // ---------------------------------------------------------------------------
 /** @brief Enumerates the methods of mesh morphing supported by Assimp.
  */
-enum aiMorphingMethod {
+enum aiMorphingMethod: unsigned {
     /** Interpolation between morph targets */
     aiMorphingMethod_VERTEX_BLEND = 0x1,
 
@@ -713,8 +713,8 @@ struct aiMesh {
      *  Note! Currently only works with Collada loader.*/
     C_STRUCT aiAnimMesh **mAnimMeshes;
 
-    /** 
-     *  Method of morphing when animeshes are specified. 
+    /**
+     *  Method of morphing when animeshes are specified.
      */
     unsigned int mMethod;
 
