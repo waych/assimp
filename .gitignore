@@ -45,6 +45,7 @@ assimp-config.cmake
 assimp-config-version.cmake
 assimpTargets*.cmake
 generated/
+compile_commands.json
 
 # MakeFile
 Makefile
@@ -52,6 +53,10 @@ code/Makefile
 test/Makefile
 test/headercheck/Makefile
 tools/assimp_cmd/Makefile
+
+# Ninja
+build.ninja
+rules.ninja
 
 # Tests
 test/results
