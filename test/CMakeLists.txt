@@ -48,6 +48,7 @@ if(NOT ASSIMP_HUNTER_ENABLED)
   INCLUDE_DIRECTORIES(
     ${Assimp_SOURCE_DIR}/contrib/gtest/include
     ${Assimp_SOURCE_DIR}/contrib/gtest/
+    ${Assimp_SOURCE_DIR}/contrib/pugixml/src
   )
 endif()
 
@@ -94,6 +95,7 @@ SET( COMMON
   unit/Common/utLineSplitter.cpp
   unit/Common/utSpatialSort.cpp
   unit/Common/utAssertHandler.cpp
+  unit/Common/utXmlParser.cpp
 )
 
 SET( IMPORTERS
@@ -210,7 +212,7 @@ add_executable( unit
 	${IMPORTERS}
 	${MATERIAL}
 	${MATH}
-    ${POST_PROCESSES}
+  ${POST_PROCESSES}
 )
 
 if(ASSIMP_HUNTER_ENABLED)
@@ -229,6 +231,8 @@ add_definitions(-DASSIMP_TEST_MODELS_NONBSD_DIR="${CMAKE_CURRENT_LIST_DIR}/model
 SET_PROPERTY( TARGET assimp PROPERTY DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX} )
 
 IF( WIN32 )
+    SET( platform_libs )
+ELSEIF(ANDROID)
     SET( platform_libs )
 ELSE()
     SET( platform_libs pthread )

@@ -117,10 +117,6 @@ OPTION ( ASSIMP_UBSAN
   "Enable Undefined Behavior sanitizer."
   OFF
 )
-OPTION ( ASSIMP_SYSTEM_IRRXML
-  "Use system installed Irrlicht/IrrXML library."
-  OFF
-)
 OPTION ( ASSIMP_BUILD_DOCS
   "Build documentation using Doxygen."
   OFF
@@ -214,7 +210,7 @@ IF(NOT GIT_COMMIT_HASH)
 ENDIF()
 
 IF(ASSIMP_DOUBLE_PRECISION)
-    ADD_DEFINITIONS(-DASSIMP_DOUBLE_PRECISION)
+  ADD_DEFINITIONS(-DASSIMP_DOUBLE_PRECISION)
 ENDIF()
 
 CONFIGURE_FILE(
@@ -359,7 +355,7 @@ ELSE()
 ENDIF()
 
 # Only generate this target if no higher-level project already has
-IF (NOT TARGET uninstall)
+IF (NOT TARGET uninstall AND ASSIMP_INSTALL)
   # add make uninstall capability
   CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
   ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
@@ -393,74 +389,54 @@ ELSE()
   SET(CMAKE_INSTALL_FULL_BINDIR ${CMAKE_INSTALL_PREFIX}/${ASSIMP_BIN_INSTALL_DIR})
 ENDIF()
 
+set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+
 IF(ASSIMP_HUNTER_ENABLED)
   set(CONFIG_INSTALL_DIR "lib/cmake/${PROJECT_NAME}")
-  set(INCLUDE_INSTALL_DIR "include")
-
-  set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
-
-  # Configuration
+  set(CMAKE_CONFIG_TEMPLATE_FILE "cmake/assimp-hunter-config.cmake.in")
+  set(NAMESPACE "${PROJECT_NAME}::")
+  set(TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
   set(VERSION_CONFIG "${GENERATED_DIR}/${PROJECT_NAME}ConfigVersion.cmake")
   set(PROJECT_CONFIG "${GENERATED_DIR}/${PROJECT_NAME}Config.cmake")
-  set(TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
-  set(NAMESPACE "${PROJECT_NAME}::")
-
-  # Include module with fuction 'write_basic_package_version_file'
-  include(CMakePackageConfigHelpers)
-
-  # Note: PROJECT_VERSION is used as a VERSION
-  write_basic_package_version_file("${VERSION_CONFIG}" COMPATIBILITY SameMajorVersion)
-
-  # Use variables:
-  #   * TARGETS_EXPORT_NAME
-  #   * PROJECT_NAME
-  configure_package_config_file(
-      "cmake/assimp-hunter-config.cmake.in"
-      "${PROJECT_CONFIG}"
-      INSTALL_DESTINATION "${CONFIG_INSTALL_DIR}"
-  )
-
-  install(
-      FILES "${PROJECT_CONFIG}" "${VERSION_CONFIG}"
-      DESTINATION "${CONFIG_INSTALL_DIR}"
-  )
-
-  install(
-      EXPORT "${TARGETS_EXPORT_NAME}"
-      NAMESPACE "${NAMESPACE}"
-      DESTINATION "${CONFIG_INSTALL_DIR}"
-  )
 ELSE()
-  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/assimp-config.cmake.in"         "${CMAKE_CURRENT_BINARY_DIR}/assimp-config.cmake" @ONLY IMMEDIATE)
-  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/assimpTargets.cmake.in"         "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets.cmake" @ONLY IMMEDIATE)
-  IF (is_multi_config)
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/assimpTargets-debug.cmake.in"   "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-debug.cmake" @ONLY IMMEDIATE)
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/assimpTargets-release.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-release.cmake" @ONLY IMMEDIATE)
-    SET(PACKAGE_TARGETS_FILE "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-debug.cmake" "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-release.cmake")
-  ELSEIF (CMAKE_BUILD_TYPE STREQUAL Debug)
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/assimpTargets-debug.cmake.in"   "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-debug.cmake" @ONLY IMMEDIATE)
-    SET(PACKAGE_TARGETS_FILE "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-debug.cmake")
-  ELSE()
-    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/assimpTargets-release.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-release.cmake" @ONLY IMMEDIATE)
-    SET(PACKAGE_TARGETS_FILE "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets-release.cmake")
-  ENDIF()
-  CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/assimp-config-version.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/assimp-config-version.cmake" @ONLY IMMEDIATE)
-  #we should generated these scripts after CMake VERSION 3.0.2 using export(EXPORT ...) and write_basic_package_version_file(...)
-  INSTALL(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/assimp-config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/assimp-config-version.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/assimpTargets.cmake"
-    ${PACKAGE_TARGETS_FILE}
-    DESTINATION "${ASSIMP_LIB_INSTALL_DIR}/cmake/assimp-${ASSIMP_VERSION_MAJOR}.${ASSIMP_VERSION_MINOR}" COMPONENT ${LIBASSIMP-DEV_COMPONENT})
+  set(CONFIG_INSTALL_DIR "${ASSIMP_LIB_INSTALL_DIR}/cmake/assimp-${ASSIMP_VERSION_MAJOR}.${ASSIMP_VERSION_MINOR}")
+  set(CMAKE_CONFIG_TEMPLATE_FILE "cmake/assimp-plain-config.cmake.in")
+  string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWERCASE)
+  set(NAMESPACE "${PROJECT_NAME_LOWERCASE}::")
+  set(TARGETS_EXPORT_NAME "${PROJECT_NAME_LOWERCASE}Targets")
+  set(VERSION_CONFIG "${GENERATED_DIR}/${PROJECT_NAME_LOWERCASE}ConfigVersion.cmake")
+  set(PROJECT_CONFIG "${GENERATED_DIR}/${PROJECT_NAME_LOWERCASE}Config.cmake")
 ENDIF()
+
+set(INCLUDE_INSTALL_DIR "include")
+
+# Include module with fuction 'write_basic_package_version_file'
+include(CMakePackageConfigHelpers)
+
+# Note: PROJECT_VERSION is used as a VERSION
+write_basic_package_version_file("${VERSION_CONFIG}" COMPATIBILITY SameMajorVersion)
+
+configure_package_config_file(
+    ${CMAKE_CONFIG_TEMPLATE_FILE}
+    "${PROJECT_CONFIG}"
+    INSTALL_DESTINATION "${CONFIG_INSTALL_DIR}"
+)
+
+install(
+    FILES "${PROJECT_CONFIG}" "${VERSION_CONFIG}"
+    DESTINATION "${CONFIG_INSTALL_DIR}"
+    COMPONENT ${LIBASSIMP-DEV_COMPONENT}
+)
+
+install(
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    NAMESPACE "${NAMESPACE}"
+    DESTINATION "${CONFIG_INSTALL_DIR}"
+    COMPONENT ${LIBASSIMP-DEV_COMPONENT}
+)
 
 IF( ASSIMP_BUILD_DOCS )
   ADD_SUBDIRECTORY(doc)
-ENDIF()
-
-# Look for system installed irrXML
-IF ( ASSIMP_SYSTEM_IRRXML )
-  FIND_PACKAGE( IrrXML REQUIRED )
 ENDIF()
 
 # Search for external dependencies, and build them from source if not found
@@ -588,10 +564,6 @@ IF (ASSIMP_BUILD_NONFREE_C4D_IMPORTER)
 ELSE ()
   ADD_DEFINITIONS( -DASSIMP_BUILD_NO_C4D_IMPORTER )
 ENDIF ()
-
-IF(NOT ASSIMP_HUNTER_ENABLED)
-  ADD_SUBDIRECTORY(contrib)
-ENDIF()
 
 ADD_SUBDIRECTORY( code/ )
 IF ( ASSIMP_BUILD_ASSIMP_TOOLS )
