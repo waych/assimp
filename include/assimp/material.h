@@ -56,6 +56,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+// Following is hackery to force LLVM to recognize all enums as unsigned in all
+// circumstances.  It turns out that when invoked on e.g. Windows, it may
+// interpret the enums as signed which leads to problems with codegen bindings
+// for rust. This is modern C++ syntax which must be protected from other
+// compilers(e.g. MSVC).
+#ifdef __llvm__
+#define ENUM_UNSIGNED : unsigned
+#else
+#define ENUM_UNSIGNED
+#endif
+
 // Name for default materials (2nd is used if meshes have UV coords)
 #define AI_DEFAULT_MATERIAL_NAME "DefaultMaterial"
 
@@ -78,7 +89,7 @@ extern "C" {
  *  @endcode
  *  where 'diffContrib' is the intensity of the incoming light for that pixel.
  */
-enum aiTextureOp: unsigned
+enum aiTextureOp ENUM_UNSIGNED
 {
     /** T = T1 * T2 */
     aiTextureOp_Multiply = 0x0,
@@ -108,7 +119,7 @@ enum aiTextureOp: unsigned
  *
  *  Commonly referred to as 'wrapping mode'.
  */
-enum aiTextureMapMode: unsigned
+enum aiTextureMapMode ENUM_UNSIGNED
 {
     /** A texture coordinate u|v is translated to u%1|v%1
      */
@@ -143,7 +154,7 @@ enum aiTextureMapMode: unsigned
  *  how the mapping should look like (e.g spherical) is given.
  *  See the #AI_MATKEY_MAPPING property for more details.
  */
-enum aiTextureMapping: unsigned
+enum aiTextureMapping ENUM_UNSIGNED
 {
     /** The mapping coordinates are taken from an UV channel.
      *
@@ -188,7 +199,7 @@ enum aiTextureMapping: unsigned
  *  and the artists working on models have to conform to this specification,
  *  regardless which 3D tool they're using.
  */
-enum aiTextureType: unsigned
+enum aiTextureType ENUM_UNSIGNED
 {
     /** Dummy value.
      *
@@ -323,7 +334,7 @@ ASSIMP_API const char *TextureTypeToString(enum aiTextureType in);
  *  most common implementation matches the original rendering results of the
  *  3D modeler which wrote a particular model as closely as possible.
  */
-enum aiShadingMode: unsigned
+enum aiShadingMode ENUM_UNSIGNED
 {
     /** Flat shading. Shading is done on per-face base,
      *  diffuse only. Also known as 'faceted shading'.
@@ -392,7 +403,7 @@ enum aiShadingMode: unsigned
  *
  *  This corresponds to the #AI_MATKEY_TEXFLAGS property.
 */
-enum aiTextureFlags: unsigned
+enum aiTextureFlags ENUM_UNSIGNED
 {
     /** The texture's color values have to be inverted (component-wise 1-n)
      */
@@ -437,7 +448,7 @@ enum aiTextureFlags: unsigned
  *  calculation.<br>
  *  This corresponds to the #AI_MATKEY_BLEND_FUNC property.
 */
-enum aiBlendMode: unsigned
+enum aiBlendMode ENUM_UNSIGNED
 {
     /**
      *  Formula:
@@ -514,7 +525,7 @@ struct aiUVTransform {
 /** @brief A very primitive RTTI system for the contents of material
  *  properties.
  */
-enum aiPropertyTypeInfo: unsigned
+enum aiPropertyTypeInfo ENUM_UNSIGNED
 {
     /** Array of single-precision (32 Bit) floats
      *
