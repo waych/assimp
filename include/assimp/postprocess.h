@@ -57,6 +57,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+// Following is hackery to force LLVM to recognize all enums as unsigned in all
+// circumstances.  It turns out that when invoked on e.g. Windows, it may
+// interpret the enums as signed which leads to problems with codegen bindings
+// for rust. This is modern C++ syntax which must be protected from other
+// compilers(e.g. MSVC).
+#ifdef __llvm__
+#define ENUM_UNSIGNED : unsigned
+#else
+#define ENUM_UNSIGNED
+#endif
+
 // -----------------------------------------------------------------------------------
 /** @enum  aiPostProcessSteps
  *  @brief Defines the flags for all possible post processing steps.
@@ -69,7 +80,7 @@ extern "C" {
  *  @see aiImportFileEx
  */
 // -----------------------------------------------------------------------------------
-enum aiPostProcessSteps: unsigned
+enum aiPostProcessSteps ENUM_UNSIGNED
 {
 
     // -------------------------------------------------------------------------

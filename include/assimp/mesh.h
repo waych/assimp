@@ -63,6 +63,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+// Following is hackery to force LLVM to recognize all enums as unsigned in all
+// circumstances.  It turns out that when invoked on e.g. Windows, it may
+// interpret the enums as signed which leads to problems with codegen bindings
+// for rust. This is modern C++ syntax which must be protected from other
+// compilers(e.g. MSVC).
+#ifdef __llvm__
+#define ENUM_UNSIGNED : unsigned
+#else
+#define ENUM_UNSIGNED
+#endif
+
 // ---------------------------------------------------------------------------
 // Limits. These values are required to match the settings Assimp was
 // compiled against. Therefore, do not redefine them unless you build the
@@ -368,7 +379,8 @@ struct aiBone {
  *  @see aiProcess_Triangulate Automatic triangulation
  *  @see AI_CONFIG_PP_SBP_REMOVE Removal of specific primitive types.
  */
-enum aiPrimitiveType: unsigned {
+enum aiPrimitiveType ENUM_UNSIGNED
+{
     /** A point primitive.
      *
      * This is just a single vertex in the virtual world,
@@ -535,7 +547,8 @@ struct aiAnimMesh {
 // ---------------------------------------------------------------------------
 /** @brief Enumerates the methods of mesh morphing supported by Assimp.
  */
-enum aiMorphingMethod: unsigned {
+enum aiMorphingMethod ENUM_UNSIGNED
+{
     /** Interpolation between morph targets */
     aiMorphingMethod_VERTEX_BLEND = 0x1,
 
