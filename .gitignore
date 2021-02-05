@@ -19,6 +19,9 @@ build
 *.VC.opendb
 *.ipch
 
+# clangd
+.clangd/
+
 # Output
 bin/
 lib/
